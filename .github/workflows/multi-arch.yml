@@ -108,6 +108,9 @@ jobs:
       - name: Download Image Builder
         run: |
           wget -q $PREFIX_URL/$DEVICE_TARGET/$DEVICE_SUBTARGET/immortalwrt-imagebuilder-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64.tar.xz
+          ls
+          echo "$PREFIX_URL/$DEVICE_TARGET/$DEVICE_SUBTARGET/immortalwrt-imagebuilder-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64.tar.xz
+          sleep 999
 
       - name: Set Mini Image Builder
         run: |
