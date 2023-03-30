@@ -12,13 +12,15 @@ env:
   PREFIX_URL: https://storage.openwrt.cc/snapshots/targets
 
 on:
-  workflow_dispatch:
-    inputs:
-      INPUT_TARGET:
-        description: "Target to build (platform/target/subtarget)"
-        required: false
-        default: "all"
-  schedule:
+  push:
+    branches: [ master ]
+ # workflow_dispatch:
+  #  inputs:
+  #    INPUT_TARGET:
+  #      description: "Target to build (platform/target/subtarget)"
+  #      required: false
+ #       default: "all"
+ # schedule:
     - cron: 0 0 * * *
 
 jobs:
