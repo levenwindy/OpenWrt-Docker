@@ -113,7 +113,6 @@ jobs:
         run: |
           tar -xJf *.tar.xz
           ls -al
-          # cd immortalwrt-imagebuilder-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
           cd openwrt-imagebuilder-22.03-SNAPSHOT-x86-64.Linux-x86_64
           cp -f $GITHUB_WORKSPACE/config/repositories.conf .
           sed -i "s/DEVICE_SUBTARGET/$DEVICE_SUBTARGET/g; \
