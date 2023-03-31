@@ -108,7 +108,7 @@ jobs:
       - name: Download Image Builder
           # wget -q $PREFIX_URL/$DEVICE_TARGET/$DEVICE_SUBTARGET/immortalwrt-imagebuilder-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64.tar.xz
         run: |
-          wget https://downloads.openwrt.org/releases/22.03-SNAPSHOT/targets/x86/64/openwrt-imagebuilder-22.03-SNAPSHOT-x86-64.Linux-x86_64.tar.xz
+          wget -q https://downloads.openwrt.org/releases/22.03-SNAPSHOT/targets/x86/64/openwrt-imagebuilder-22.03-SNAPSHOT-x86-64.Linux-x86_64.tar.xz
       - name: Set Mini Image Builder
         run: |
           tar -xJf *.tar.xz
@@ -132,6 +132,7 @@ jobs:
           sed -i "/CONFIG_TARGET_ROOTFS_SQUASHFS/s/.*/# CONFIG_TARGET_ROOTFS_SQUASHFS is not set/;
             /CONFIG_TARGET_ROOTFS_EXT4FS/s/.*/# CONFIG_TARGET_ROOTFS_EXT4FS is not set/" .config
           export CONFIG_MINI_PACKAGES=$(cat $GITHUB_WORKSPACE/config/mini-packages.config | tr -s "\n" " ")
+          echo "$CONFIG_MINI_PACKAGES" && sleep 30
           make image PACKAGES="$CONFIG_MINI_PACKAGES" FILES="files"
           cp bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/*rootfs.tar.gz $GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE
