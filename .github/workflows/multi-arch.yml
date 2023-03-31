@@ -127,6 +127,7 @@ jobs:
             s/DEVICE_PLATFORM/$DEVICE_PLATFORM/g" files/etc/opkg/distfeeds.conf
 
       - name: Build Normal RootFS
+        #  make image PACKAGES="$CONFIG_NORMAL_PACKAGES" FILES="files"
         run: |
           cd openwrt-imagebuilder-22.03.3-x86-64.Linux-x86_64
           chmod +x $GITHUB_WORKSPACE/scripts/*
@@ -135,7 +136,7 @@ jobs:
             /CONFIG_TARGET_ROOTFS_EXT4FS/s/.*/# CONFIG_TARGET_ROOTFS_EXT4FS is not set/" .config
           export CONFIG_NORMAL_PACKAGES=$(cat $GITHUB_WORKSPACE/config/normal-packages.config | tr -s "\n" " ")
           make info
-          make image PACKAGES="$CONFIG_NORMAL_PACKAGES" FILES="files"
+          make image
           cp bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/*rootfs.tar.gz $GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE
           rm -rf immortalwrt-imagebuilder*
