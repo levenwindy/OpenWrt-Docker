@@ -106,8 +106,8 @@ jobs:
           echo "DOCKER_EXTERA_TAG=$DOCKER_EXTERA_TAG" >> $GITHUB_ENV
 
       - name: Download Image Builder
-        run: |
           # wget -q $PREFIX_URL/$DEVICE_TARGET/$DEVICE_SUBTARGET/immortalwrt-imagebuilder-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64.tar.xz
+        run: |
           wget https://downloads.openwrt.org/releases/22.03-SNAPSHOT/targets/x86/64/openwrt-imagebuilder-22.03-SNAPSHOT-x86-64.Linux-x86_64.tar.xz
       - name: Set Mini Image Builder
         run: |
@@ -132,10 +132,12 @@ jobs:
           sed -i "/CONFIG_TARGET_ROOTFS_SQUASHFS/s/.*/# CONFIG_TARGET_ROOTFS_SQUASHFS is not set/;
             /CONFIG_TARGET_ROOTFS_EXT4FS/s/.*/# CONFIG_TARGET_ROOTFS_EXT4FS is not set/" .config
           export CONFIG_MINI_PACKAGES=$(cat $GITHUB_WORKSPACE/config/mini-packages.config | tr -s "\n" " ")
+          sleep 30
           make image PACKAGES="$CONFIG_MINI_PACKAGES" FILES="files"
+          sleep 30
           cp bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/*rootfs.tar.gz $GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE
-          rm -rf immortalwrt-imagebuilder-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
+          rm -rf openwrt-imagebuilder-22.03-SNAPSHOT-x86-64.Linux-x86_64.tar.xz
 
       - name: Build & Push Mini Image (Default)
         if: env.DOCKER_EXTERA_TAG == null
