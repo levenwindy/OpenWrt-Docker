@@ -146,9 +146,6 @@ jobs:
           echo "pwd:"; pwd
           cd $GITHUB_WORKSPACE
           rm -rf immortalwrt-imagebuilder*
-          cd
-          mkdir tar
-          cp *rootfs.tar.gz tar/
           
       - name: 参数显示
         run: |
@@ -170,7 +167,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: immortalwrt-x86-64-generic-rootfs.tar.gz
-          path: $GITHUB_WORKSPACE/tar
+          path: $GITHUB_WORKSPACE
     
    #   - name: Build & Push Normal Image (Default)
    #     if: env.DOCKER_EXTERA_TAG == null
