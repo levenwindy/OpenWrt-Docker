@@ -33,7 +33,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@main
-
+      
+      
       - name: Find Targets
         id: find-targets
         env:
@@ -55,6 +56,7 @@ jobs:
           echo $JSON
           echo "::set-output name=TARGETS::$JSON"
 
+          
   Docker-Images:
     name: ${{ matrix.TARGETS }}
     needs: [Config]
@@ -105,10 +107,11 @@ jobs:
           export DOCKER_EXTERA_TAG=$(echo ${{ matrix.TARGETS }} | awk -F '/' '{print $5}')
           echo "DOCKER_EXTERA_TAG=$DOCKER_EXTERA_TAG" >> $GITHUB_ENV
 
+
       - name: Download Image Builder
-          # wget -q $PREFIX_URL/$DEVICE_TARGET/$DEVICE_SUBTARGET/immortalwrt-imagebuilder-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64.tar.xz
         run: |
-          wget -q https://downloads.openwrt.org/releases/22.03.3/targets/x86/64/openwrt-imagebuilder-22.03.3-x86-64.Linux-x86_64.tar.xz
+          wget -q $PREFIX_URL/$DEVICE_TARGET/$DEVICE_SUBTARGET/immortalwrt-imagebuilder-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64.tar.xz
+       # wget -q https://downloads.openwrt.org/releases/22.03.3/targets/x86/64/openwrt-imagebuilder-22.03.3-x86-64.Linux-x86_64.tar.xz
 
       - name: Set Normal Image Builder
         run: |
@@ -140,7 +143,27 @@ jobs:
           cp bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/*rootfs.tar.gz $GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE
           rm -rf immortalwrt-imagebuilder*
-
+          
+      - name: 参数显示
+        run: |
+          echo "steps.find-targets.outputs.TARGETS: ${{ steps.find-targets.outputs.TARGETS }}"
+          echo "steps.find-targets ${{ steps.find-targets }}"
+          
+          echo "github.event.inputs.INPUT_TARGET: ${{ github.event.inputs.INPUT_TARGET }}"
+          echo "github.event.inputs: ${{ github.event.inputs }}"
+          echo "matrix.TARGETS ${{ matrix.TARGETS }} "
+          echo "matrix ${{ matrix }} "
+          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+          echo "pwd: $pwd"
+          cd $GITHUB_WORKSPACE
+          ls -al
+          
+      - name : Upload artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: Openwrt
+          path: $GITHUB_WORKSPACE
+    
    #   - name: Build & Push Normal Image (Default)
    #     if: env.DOCKER_EXTERA_TAG == null
     #    uses: docker/build-push-action@v2
