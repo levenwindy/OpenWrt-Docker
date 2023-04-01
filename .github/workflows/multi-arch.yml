@@ -143,28 +143,39 @@ jobs:
           export CONFIG_NORMAL_PACKAGES=$(cat $GITHUB_WORKSPACE/config/normal-packages.config | tr -s "\n" " ")
           make image PACKAGES="$CONFIG_NORMAL_PACKAGES" FILES="files"
           cp bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/*rootfs.tar.gz $GITHUB_WORKSPACE
+          cd /
+          mkdir FILE
+          cp bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/*rootfs.tar.gz  /FILE
           cd $GITHUB_WORKSPACE
           rm -rf immortalwrt-imagebuilder*
           
       - name: 参数显示
         run: |
           echo "steps.find-targets.outputs.TARGETS: ${{ steps.find-targets.outputs.TARGETS }}"
-          echo "steps.find-targets ${{ steps.find-targets }}"
-          
-          echo "github.event.inputs.INPUT_TARGET: ${{ github.event.inputs.INPUT_TARGET }}"
-          echo "github.event.inputs: ${{ github.event.inputs }}"
-          echo "matrix.TARGETS ${{ matrix.TARGETS }} "
-          echo "matrix ${{ matrix }} "
-          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
-          echo "pwd: $pwd"
+          echo ${{ steps.find-targets.outputs.TARGETS }}
+          echo "steps.find-targets："
+          echo ${{ steps.find-targets }}
+          echo "github.event.inputs.INPUT_TARGET:"
+          echo  ${{ github.event.inputs.INPUT_TARGET }}
+          echo "github.event.inputs:"
+          echo ${{ github.event.inputs }}
+          echo "matrix.TARGETS："
+          echo ${{ matrix.TARGETS }}
+          echo "matrix： "
+          echo ${{ matrix }} 
+          echo "GITHUB_WORKSPACE: "
+          echo $GITHUB_WORKSPACE
+          echo "pwd:"
+          echo  $pwd
           cd $GITHUB_WORKSPACE
           ls -al
+          
           
       - name : Upload artifact
         uses: actions/upload-artifact@master
         with:
-          name: Openwrt
-          path: $GITHUB_WORKSPACE
+          name: openwrt
+          path: /FILE
     
    #   - name: Build & Push Normal Image (Default)
    #     if: env.DOCKER_EXTERA_TAG == null
