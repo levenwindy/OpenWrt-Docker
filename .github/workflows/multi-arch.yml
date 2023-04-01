@@ -143,8 +143,10 @@ jobs:
           export CONFIG_NORMAL_PACKAGES=$(cat $GITHUB_WORKSPACE/config/normal-packages.config | tr -s "\n" " ")
           make image PACKAGES="$CONFIG_NORMAL_PACKAGES" FILES="files"
           cp bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/*rootfs.tar.gz $GITHUB_WORKSPACE
+          cd 
           mkdir FILE
-          cp bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/*rootfs.tar.gz  FILE/
+          cp immortalwrt-imagebuilder-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64/bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/*rootfs.tar.gz  FILE/
+          cd immortalwrt-imagebuilder-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64
           cd $GITHUB_WORKSPACE
           rm -rf immortalwrt-imagebuilder*
           
@@ -165,7 +167,7 @@ jobs:
           echo "GITHUB_WORKSPACE: "
           echo $GITHUB_WORKSPACE
           echo "pwd:"
-          echo  $pwd
+          pwd
           cd $GITHUB_WORKSPACE
           ls -al
           
@@ -174,7 +176,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: openwrt
-          path: immortalwrt-imagebuilder-$DEVICE_TARGET-$DEVICE_SUBTARGET.Linux-x86_64/FILE/
+          path: FILE/
     
    #   - name: Build & Push Normal Image (Default)
    #     if: env.DOCKER_EXTERA_TAG == null
